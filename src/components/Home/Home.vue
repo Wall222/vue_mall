@@ -1,13 +1,11 @@
 <template>
   <div class="home">
       <van-nav-bar id="home_navbar" title="购物街" :fixed="true"/>
-      <scroll ref="scrollRef" :probe-type="3" :pull-up-load="true" @pullingUp="loadMore">
           <home-swipe :banner='banner'></home-swipe>
         <home-recommend :recommend='recommend'></home-recommend>
         <feature/>
         <home-tab :activeName="activeName" @tabClick="changeActiveName" sticky class="hometab"></home-tab>
-        <home-good-list :goods="goodsList[activeName].list"></home-good-list>
-          </scroll>
+        <home-good-list :goods="goodsList[activeName].list"  @loadmore="loadmore"></home-good-list>
          <back-top @click.native="backTopClick" v-show="backtop"></back-top>
 </div>
 </template>
@@ -19,7 +17,6 @@ import HomeRecommend from './HomeRecommend'
 import Feature from './Feature'
 import HomeTab from './HomeTab'
 import HomeGoodList from './HomeGoodList'
-import Scroll from '../Scroll/Scroll'
 import BackTop from './BackTop'
 
 export default {
@@ -30,7 +27,6 @@ export default {
     Feature,
     HomeTab,
     HomeGoodList,
-    Scroll,
     BackTop
   },
   data() {
@@ -39,6 +35,9 @@ export default {
       recommend: [],
       activeName: 'pop',
       backtop: false,
+      loading: false,
+      finished: false,
+      saveY:0,
       goodsList: {
         pop: {page:0,list:[]},
         new: {page:0,list:[]},
@@ -51,9 +50,8 @@ export default {
       this.getGoodsList('pop')
       this.getGoodsList('new')
       this.getGoodsList('sell')
-      window.addEventListener("scroll", this.handleScroll, true);
    },
-  
+
   methods: {
     async getHomeMultidata() {
       const {data : res} = await getHomeMultidata()
@@ -65,7 +63,6 @@ export default {
       let page = this.goodsList[type].page + 1
       const {data : res} = await getGoodsList(type,page)
       this.goodsList[type].list.push(...res.list)
-      console.log(this.goodsList[type].list);
       this.goodsList[type].page += 1
     },
     changeActiveName(activeName) {
@@ -86,11 +83,9 @@ export default {
         }
       }, 10);
   },
-  loadMore() {
-      this.getGoodsList(this.activeName)
-      this.$refs.scrollRef.finishPullUp()
-      this.$refs.scrollRef.refresh()
-  }
+  loadmore() {
+    this.getGoodsList(this.activeName)
+  },
   }
 }
 </script>
@@ -113,9 +108,6 @@ export default {
   position: sticky;
   top:40px;
 }
-.content {
-  width: 100%;
-  height: 100vh;
-}
+
 
 </style>

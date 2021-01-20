@@ -1,10 +1,12 @@
 <template>
-  <div>分类</div>
+  <div></div>
 </template>
 
 <script>
 export default {
-
+  created() {
+    document.documentElement.scrollTop = 5000
+  }
 }
 </script>
 

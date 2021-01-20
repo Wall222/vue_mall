@@ -1,22 +1,26 @@
 <template>
-  <div class="goods-item" @click="itemClick">
-    <img :src="goodsItem.show.img" alt="">
-    <div class="goods-info">
-      <p>{{goodsItem.title}}</p>
-      <span class="price">{{goodsItem.price}}</span>
-      <span class="collect">
-        <van-icon name="star-o" />{{goodsItem.cfav}}
-      </span>
+  <div class="recommend_list" v-if="recommendList.length !== 0">
+    <div class="goods-item" v-for="item in recommendList" :key=" item.item_id">
+      <div>
+        <img :src="item.image" alt="">
+        <div class="goods-info">
+          <p>{{item.title}}</p>
+          <span class="price">{{item.price}}</span>
+          <span class="collect">
+            <van-icon name="star-o" />{{item.cfav}}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
  export default {
-  name: 'GoodListItem',
+  name: '',
   props: {
-    goodsItem: {
-      type: Object
+    recommendList: {
+      type:Array
     }
   },
   data () {
@@ -24,20 +28,17 @@
 
    }
   },
-  methods: {
-    itemClick() {
-      this.$router.push({
-        path: '/detail',
-        query: {
-          iid: this.goodsItem.iid
-        }
-      });
-    }
-  }
  }
 </script>
 
 <style lang="less" scoped>
+.recommend_list {
+      display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-bottom: 60px;
+}
   .goods-item {
     padding-bottom: 40px;
     position: relative;
@@ -85,5 +86,6 @@
     height: 14px;
     background:  0 0/14px 14px;
   }
+ 
  
 </style>

@@ -7,6 +7,7 @@ import './network/request.js'
 import request from './network/request.js'
 
 Vue.config.productionTip = false
+Vue.config.devtools = true;
 
 new Vue({
   router,
